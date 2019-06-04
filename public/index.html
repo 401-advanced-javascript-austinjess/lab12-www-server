@@ -1,39 +1,70 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Auth Test</title>
-    </head>
-    <body>
-        <main>
+  <head>
+    <title>Auth Test</title>
+  </head>
+  <body>
+    <main>
+      <div id="oauth"></div>
+    </main>
 
-            <div id="oauth"></div>
+    <script src="http://code.jquery.com/jquery-3.3.1.js"></script>
 
-        </main>
+    <script>
+      let googleURL = 'https://accounts.google.com/o/oauth2/v2/auth';
+      let githubURL = `https://github.com/login/oauth/authorize`;
+      let wordpressURL = `https://public-api.wordpress.com/oauth2/authorize`;
+      let options = {
+        client_id:
+          '1055200564219-qn3k2f0ouuqkcg2168ej4abkg9hiil08.apps.googleusercontent.com',
+        redirect_uri: 'http://localhost:3000/googleAuth',
+        scope: 'email openid profile',
+        prompt: 'consent',
+        response_type: 'code'
+      };
 
-        <script src="http://code.jquery.com/jquery-3.3.1.js"></script>
+      let githubOptions = {
+        client_id: '59b02c8d1f385bf50239',
+        redirect_uri: 'http://localhost:3000/githubAuth',
+        scope: 'user',
+        prompt: 'consent',
+        response_type: 'code'
+      };
 
-        <script>
+      let wordpressOptions = {
+        client_id: '65898',
+        redirect_uri: 'http://localhost:3000/wordpressAuth',
+        prompt: 'consent',
+        response_type: 'code'
+      };
 
-          let googleURL = "https://accounts.google.com/o/oauth2/v2/auth";
+      let WordpressQuery = Object.keys(options)
+        .map((key, i) => {
+          return `${key}=` + encodeURIComponent(wordpressOptions[key]);
+        })
+        .join('&');
 
-          let options = {
-            client_id:'YOUR-GOOGLE-CLIENT-ID',
-            redirect_uri: 'YOUR-SERVER-URL/oauth',
-            scope: 'email openid profile',
-            prompt: 'consent',
-            response_type: 'code'
-          };
+      let QueryString = Object.keys(options)
+        .map((key, i) => {
+          return `${key}=` + encodeURIComponent(options[key]);
+        })
+        .join('&');
 
-          let QueryString = Object.keys(options).map( (key,i) => {
-            return `${key}=` + encodeURIComponent(options[key]);
-          }).join("&");
+      let GithubQuery = Object.keys(githubOptions)
+        .map((key, i) => {
+          return `${key}=` + encodeURIComponent(githubOptions[key]);
+        })
+        .join('&');
 
-          let authURL = `${googleURL}?${QueryString}`;
+      let authURL = `${googleURL}?${QueryString}`;
+      let githubAuthURL = `${githubURL}?${GithubQuery}`;
+      let wordpressAuthURL = `${wordpressURL}?${WordpressQuery}`;
 
-          $('#oauth').append(`<a href="${authURL}">Login With Google</a>`);
-
-        </script>
-
-
-    </body>
+      $('#oauth').append(`<a href="${authURL}">Login With Google</a>`);
+      $('#oauth').append(`<a href="${githubAuthURL}">Login With Github</a>`);
+      $('#oauth').append(
+        `<a href="${wordpressAuthURL}">Login With Wordpress</a>`
+      );
+    </script>
+  </body>
 </html>
