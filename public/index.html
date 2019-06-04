@@ -13,10 +13,11 @@
     <script>
       let googleURL = 'https://accounts.google.com/o/oauth2/v2/auth';
       let githubURL = `https://github.com/login/oauth/authorize`;
+      let wordpressURL = `https://public-api.wordpress.com/oauth2/authorize`;
       let options = {
         client_id:
           '1055200564219-qn3k2f0ouuqkcg2168ej4abkg9hiil08.apps.googleusercontent.com',
-        redirect_uri: 'http://localhost:3000/oauth',
+        redirect_uri: 'http://localhost:3000/googleAuth',
         scope: 'email openid profile',
         prompt: 'consent',
         response_type: 'code'
@@ -24,11 +25,24 @@
 
       let githubOptions = {
         client_id: '59b02c8d1f385bf50239',
-        redirect_uri: 'http://localhost:3000/oauth',
+        redirect_uri: 'http://localhost:3000/githubAuth',
         scope: 'user',
         prompt: 'consent',
         response_type: 'code'
       };
+
+      let wordpressOptions = {
+        client_id: '65898',
+        redirect_uri: 'http://localhost:3000/wordpressAuth',
+        prompt: 'consent',
+        response_type: 'code'
+      };
+
+      let WordpressQuery = Object.keys(options)
+        .map((key, i) => {
+          return `${key}=` + encodeURIComponent(wordpressOptions[key]);
+        })
+        .join('&');
 
       let QueryString = Object.keys(options)
         .map((key, i) => {
@@ -44,9 +58,13 @@
 
       let authURL = `${googleURL}?${QueryString}`;
       let githubAuthURL = `${githubURL}?${GithubQuery}`;
+      let wordpressAuthURL = `${wordpressURL}?${WordpressQuery}`;
 
       $('#oauth').append(`<a href="${authURL}">Login With Google</a>`);
       $('#oauth').append(`<a href="${githubAuthURL}">Login With Github</a>`);
+      $('#oauth').append(
+        `<a href="${wordpressAuthURL}">Login With Wordpress</a>`
+      );
     </script>
   </body>
 </html>
